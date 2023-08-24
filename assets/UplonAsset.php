@@ -20,8 +20,10 @@ class UplonAsset extends AssetBundle
     public $sourcePath = '@themes/uplon/assets';
     public $css = [
         'css/bootstrap.min.css',
+        'css/bootstrap-dark.min.css',
         'css/icons.css',
         'css/app.css',
+        'css/app-dark.css',
         'css/custom.css'
     ];
     public $js = [

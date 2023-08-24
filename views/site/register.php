@@ -22,8 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'fieldConfig' => [
 //                'template' => "{label}\n{input}\n{error}",
             'template' => "{label}\n{input}",
-            'labelOptions' => ['class' => 'col-12 col-form-label text-secondary', 'style' => 'font-weight: 400', 'icon' => '<i></i>'],
-            'inputOptions' => ['class' => 'col-12 form-control text-secondary'],
+            'labelOptions' => ['class' => 'col-12 col-form-label', 'style' => 'font-weight: 400', 'icon' => '<i></i>'],
+            'inputOptions' => ['class' => 'col-12 form-control'],
 //                'errorOptions' => ['class' => 'col-12 invalid-feedback'],
             'horizontalCssClasses' => [
                 'field' => 'mb-3',
@@ -34,16 +34,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <!-- card 1 -->        
     <div class="col-md-6">
         <div class="card mb-0">
-            <div class="card-header bg-primary" style="height: 183px">
+            <div class="card-header bg-indigo" style="height: 183px">
                 <div class="text-center">
                     <div class="my-3">
-                        <?php /*
                         <a href="#">
-                            <span><img src="assets/images/logo.png" alt="" height="28"></span>
+                            <img src="<?= Yii::getAlias('@web').'/images/LOGO.png' ?>" style="width:100%; max-height:100px; object-fit:scale-down">
                         </a>
-                        */ ?>
-                        <h3 class="text-center text-white">AUTOCAREPRO</h3>
-                        <h4 class="text-center text-white"><?= strtoupper(@$area) ?></h4>
+                        <!-- <h3 class="text-center text-white">AUTOCAREPRO</h3> -->
+                        <!-- <h4 class="text-center text-white"><?= strtoupper(@$area) ?></h4> -->
                     </div>
                     <!-- <h5 class="text-white text-uppercase py-3 font-16"><?= Html::encode($this->title) ?></h5> -->
                     <p class="text-white-50">Please fill out the following fields</p>
@@ -60,8 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 ?>
                 <div class="mb-3 field-referral-code required">
-                    <label class="col-12 col-form-label text-secondary" style="font-weight: 400" icon="<i></i>" for="referral-code">Referral Code</label>
-                    <input type="text" id="referral_code" maxlength="8" class="col-12 form-control text-secondary" 
+                    <label class="col-12 col-form-label" style="font-weight: 400" icon="<i></i>" for="referral-code">Referral Code</label>
+                    <input type="text" id="referral_code" maxlength="8" class="col-12 form-control" 
                         name="User[registered_referral_code]" 
                         value="<?= $referralValue ?>" aria-required="true" 
                         aria-invalid="false" <?= $attribute ?>>
@@ -89,11 +87,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]) ?>
 
                 <div class="mb-3 field-harga_paket" style="padding:unset">
-                    <label class="col-12 col-form-label text-secondary" for="username">Username</label>
+                    <label class="col-12 col-form-label " for="username">Username</label>
                     <div class="input-group mb-3 mr-3">
-                        <input type="text" class="col-12 form-control text-secondary" name="User[username]" id="username" required>
+                        <input type="text" class="col-12 form-control " name="User[username]" id="username" required>
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-success btn-sm" onclick="generateUsername()" title="Generate">
+                            <button type="button" class="btn btn-warning btn-sm" onclick="generateUsername()" title="Generate">
                                 <i class="ti-shield px-2 h6 text-white"></i>
                             </button>                                    
                         </div>
@@ -101,11 +99,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <div class="mb-3 field-harga_paket" style="padding:unset">
-                    <label class="col-12 col-form-label text-secondary" for="password">Password</label>
+                    <label class="col-12 col-form-label " for="password">Password</label>
                     <div class="input-group mb-3 mr-3">
-                        <input type="text" class="col-12 form-control text-secondary" name="User[password]" id="password" minlength='8' required>
+                        <input type="text" class="col-12 form-control " name="User[password]" id="password" minlength='8' required>
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-success btn-sm" onclick="generatePassword()" title="Generate">
+                            <button type="button" class="btn btn-warning btn-sm" onclick="generatePassword()" title="Generate">
                                 <i class="ti-shield px-2 h6 text-white"></i>
                             </button>                                    
                         </div>
@@ -113,12 +111,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <?= $form->field($model, 'accept_terms')->checkbox([
-                    'template' => "<div class=\"col-12 checkbox checkbox-primary ml-2 text-secondary\">{input} {label}</div>\n<div class=\"col-12\">{error}</div>",
+                    'template' => "<div class=\"col-12 checkbox checkbox-purple ml-2 \">{input} {label}</div>\n<div class=\"col-12\">{error}</div>",
                     'required' => true,
                 ])->label('I accept Terms and Conditions') ?>
 
                 <div class="" style="padding-bottom: 0.5rem; margin-bottom: 7px">
-                    <?= Html::submitButton('Submit', ['class' => 'btn btn-outline-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('Submit', ['class' => 'btn btn-outline-purple', 'name' => 'login-button']) ?>
                 </div>
             </div> <!-- end card-body -->
         </div>
@@ -132,7 +130,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row mt-3">
     <div class="col-12 text-center">
-        <p class="text-secondary">Have an account? <a href="<?= \yii\helpers\Url::to(['/site/login']) ?>" class="text-primary ml-1"><b>Login</b></a></p>
+        <p class="">Have an account? <a href="<?= \yii\helpers\Url::to(['/site/login']) ?>" class="text-purple ml-1"><b>Login</b></a></p>
     </div> <!-- end col -->
 </div>
 

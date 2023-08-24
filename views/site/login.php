@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'fieldConfig' => [
 //                'template' => "{label}\n{input}\n{error}",
                 'template' => "{label}\n{input}",
-                'labelOptions' => ['class' => 'col-12 col-form-label text-secondary', 'style' => 'font-weight: 400', 'icon' => '<i></i>'],
-                'inputOptions' => ['class' => 'col-12 form-control text-secondary'],
+                'labelOptions' => ['class' => 'col-12 col-form-label', 'style' => 'font-weight: 400', 'icon' => '<i></i>'],
+                'inputOptions' => ['class' => 'col-12 form-control'],
 //                'errorOptions' => ['class' => 'col-12 invalid-feedback'],
                 'horizontalCssClasses' => [
                     'field' => 'mb-3',
@@ -29,15 +29,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
         <div class="card mb-0">
-            <div class="card-header bg-primary">
+            <div class="card-header bg-indigo">
                 <div class="text-center">
                     <div class="my-3">
-                        <?php /*
                         <a href="#">
-                            <span><img src="assets/images/logo.png" alt="" height="28"></span>
+                            <img src="<?= Yii::getAlias('@web').'/images/LOGO.png' ?>" style="width:100%">
                         </a>
-                        */ ?>
-                        <h3 class="text-center text-white">AUTOCAREPRO</h3>
+                        
+                        <!-- <h3 class="text-center text-white">AUTOCAREPRO</h3> -->
                         <!-- <h4 class="text-center text-white"><?= strtoupper(@$area) ?></h4> -->
                     </div>
                     <!-- <h5 class="text-white text-uppercase py-3 font-16"><?= Html::encode($this->title) ?></h5> -->
@@ -50,11 +49,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($model, 'password')->passwordInput() ?>
 
                 <?= $form->field($model, 'rememberMe')->checkbox([
-                    'template' => "<div class=\"col-12 checkbox checkbox-primary ml-2 text-secondary\">{input} {label}</div>\n<div class=\"col-12\">{error}</div>",
+                    'template' => "<div class=\"col-12 checkbox checkbox-purple ml-2 \">{input} {label}</div>\n<div class=\"col-12\">{error}</div>",
                 ]) ?>
 
                 <div class="" style="padding: 0.5rem 0rem;">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-outline-primary', 'name' => 'login-button']) ?>
+                    <?= Html::submitButton('Login', ['class' => 'btn btn-outline-purple', 'name' => 'login-button']) ?>
                 </div>
             </div> <!-- end card-body -->
         </div>
@@ -62,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- end card -->
         <div class="row mt-3">
             <div class="col-12 text-center">
-                <p class="text-secondary">Don't have an account? <a href="<?= \yii\helpers\Url::to(['/site/register']) ?>" class="text-purple ml-1"><b>Register</b></a></p>
+                <p class="">Don't have an account? <a href="<?= \yii\helpers\Url::to(['/site/register']) ?>" class="text-purple ml-1"><b>Register</b></a></p>
             </div> <!-- end col -->
         </div>
         <!-- end row -->
