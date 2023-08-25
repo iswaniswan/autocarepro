@@ -382,7 +382,7 @@ class ChartBinary2
                 background-color:#fff;position:absolute;margin-top:-25px;margin-left:15px;border-radius:100px;width:50px;height:50px;
             }
             .bt-node_content_img {
-                position:relative;margin-top:-20px;border-radius:100px;width:64px;height:64px;
+                position:relative;margin-top:-20px;border-radius:100px;width:64px;height:64px;border:1px solid #aaa;
             }
             .bt-node_content_label {
                 color:#08011E;position:absolute;right:0px;top:8px;font-size:10px;

@@ -15,13 +15,13 @@ use yii\web\AssetBundle;
  * @author Qiang Xue <qiang.xue@gmail.com>
  * @since 2.0
  */
-class UplonAsset extends AssetBundle
+class UplonAssetDark extends AssetBundle
 {
     public $sourcePath = '@themes/uplon/assets';
     public $css = [
-        'css/bootstrap.min.css',
+        'css/bootstrap-dark.min.css',
         'css/icons.css',
-        'css/app.css',
+        'css/app-dark.css',
         'css/custom.css'
     ];
     public $js = [

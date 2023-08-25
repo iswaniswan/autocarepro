@@ -1,6 +1,7 @@
 <?php
 
 use app\components\Mode;
+use app\components\Session;
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -10,7 +11,7 @@ use yii\web\View;
 /* @var $model app\models\Member */
 /* @var $referrer string */
 
-$this->title = 'Update Profile';
+$this->title = 'Info Paket';
 $this->params['breadcrumbs'][] = ['label' => 'Members', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Sunting';
 ?>
@@ -30,8 +31,8 @@ $this->params['breadcrumbs'][] = 'Sunting';
     'enableClientValidation' => false,
     'fieldConfig' => [
         'horizontalCssClasses' => [
-            'label' => 'col-2',
-            'wrapper' => 'col',
+            'label' => 'col-12',
+            'wrapper' => 'col-12',
             'error' => '',
             'hint' => '',
             'field' => 'mb-3 row',
@@ -42,7 +43,15 @@ $this->params['breadcrumbs'][] = 'Sunting';
 ]); ?>
 
 <div class="row">
-    <div class="container-fluid">
+    <div class="col-8">
+        <div class="dt-button-wrapper">
+            <?php $id_member = Session::getIdMember(); ?>
+            <?= Html::a('<i class="icon-user mr-2"></i>Profile', ['member/update-profile', 'id' => $id_member], ['class' => 'btn btn-success mb-1']) ?>
+            <?= Html::a('<i class="icon-badge mr-2"></i>Paket', ['member/update-paket', 'id' => $id_member], ['class' => 'btn btn-purple mb-1']) ?>
+            <?= Html::a('<i class="icon-wallet mr-2"></i>Bank', ['member/update-bank', 'id' => $id_member], ['class' => 'btn btn-info mb-1']) ?>
+            <?= Html::a('<i class="icon-lock-open mr-2"></i>Security', ['member/update-security', 'id' => $id_member], ['class' => 'btn btn-danger mb-1']) ?>            
+        </div>
+
         <div class="member-form card-box">
             <div class="card-body row">
                 <div class="col-12" style="border-bottom: 1px solid #ccc; margin-bottom: 2rem;">
@@ -58,8 +67,8 @@ $this->params['breadcrumbs'][] = 'Sunting';
                     ]) ?>
 
                     <div class="row field-harga_paket" style="padding:unset">
-                        <label class="col-2" for="harga_paket">Omzet</label>
-                        <div class="col">
+                        <label class="col-12" for="harga_paket">Omzet</label>
+                        <div class="col-12">
                             <div class="input-group mb-3 mr-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">IDR</span>
@@ -75,8 +84,8 @@ $this->params['breadcrumbs'][] = 'Sunting';
                     ])->label('Tanggal Aktif') ?>
                     
                     <div class="row field-harga_paket" style="padding:unset">
-                        <label class="col-2" for="harga_paket">Kode Referral</label>
-                        <div class="col">
+                        <label class="col-12" for="harga_paket">Kode Referral</label>
+                        <div class="col-12">
                             <div class="input-group mb-3 mr-3">
                                 <input type="text" class="form-control" value="<?= @$model->referral_code ?>" id="referral_code" readonly>
                                 <div class="input-group-append">
@@ -89,8 +98,8 @@ $this->params['breadcrumbs'][] = 'Sunting';
                     </div>
 
                     <div class="row field-harga_paket" style="padding:unset">
-                        <label class="col-2" for="harga_paket">Link Referral</label>
-                        <div class="col">
+                        <label class="col-12" for="harga_paket">Link Referral</label>
+                        <div class="col-12">
                             <div class="input-group mb-3 mr-3">
                                 <?php 
                                 $params = '/site/register?referral='.$model->referral_code;

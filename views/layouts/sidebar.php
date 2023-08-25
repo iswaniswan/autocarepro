@@ -6,6 +6,7 @@ use app\widgets\UplonMenu;
 $itemsDistributor = [
     ['label' => 'Distributor','header' => true],
     ['label' => 'Dashboard', 'icon' => 'ti-dashboard', 'url' => ['/dashboard/index-distributor']],
+    ['label' => 'ROI', 'icon' => 'ti-reload', 'url' => ['/roi/index-distributor']],
     ['label' => 'Tickets', 'icon' => 'ti-ticket', 'url' => ['/fund-ticket/index-distributor']],
     ['label' => 'Downline', 'icon' => 'ti-link', 'items' => [
         ['label' => 'My Downlines', 'url' =>['/member/index-member-downline-binary']],
@@ -25,7 +26,7 @@ $itemsAdmin = [
     ['label' => 'Dashboard', 'icon' => 'ti-dashboard', 'url' => ['/dashboard/index']],
     ['label' => 'ROI', 'icon' => 'ti-reload', 'items' => [
         ['label' => 'Setting', 'url' => ['/roi/index-admin']],
-        ['label' => 'Riwayat', 'url' => ['/roi/index-history']],
+        ['label' => 'Riwayat', 'url' => ['/roi/index-history-daily']],
     ]],
     ['label' => 'Tickets', 'icon' => 'ti-ticket', 'url' => ['/fund-ticket/index']],
     ['label' => 'Distributors', 'icon' => 'ti-home', 'items' => [

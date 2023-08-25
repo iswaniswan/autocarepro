@@ -13,6 +13,9 @@ use Yii;
  */
 class Roi extends \yii\db\ActiveRecord
 {
+
+    const MAX = 90;
+
     /**
      * {@inheritdoc}
      */
@@ -48,4 +51,6 @@ class Roi extends \yii\db\ActiveRecord
     {
         return static::find()->orderBy(['date_created' => SORT_DESC])->one();
     }
+
+
 }

@@ -26,9 +26,27 @@ DataTableAsset::register($this);
     ],
 ]) ?>
 
-<div class="member-update row">    
+<div class="member-update row">
+    <div class="col-12">
+        <div class="dt-button-wrapper">
+            <a class="btn btn-info mb-1" href="javascript:void(0)" onclick="dtPrint()"><i class="ti-printer mr-2"></i> Print</a>            
+            <div class="btn-group mr-1">
+                <a class="btn btn-success mb-1 dropdown-toggle" href="javascript:void(0)" data-toggle="dropdown">
+                    <i class="ti-download mr-2"></i> Export</a>                
+                    <div class="dropdown-menu" x-placement="bottom-start">
+                <a class="dropdown-item" href="javascript:void(0)" onclick="dtExportExcel()">Excel</a>
+                <a class="dropdown-item" href="javascript:void(0)" onclick="dtExportPdf()">Pdf</a>                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-sm-12">            
         <div class="card-box">
+            <div class="mb-4">
+                <h4 class="header-title" style="">
+                    <?= $this->title ?>
+                </h4>
+            </div>
+
             <div class="table-responsive">
                 <table class="table mb-0">
                     <thead class="thead-light">
@@ -59,7 +77,7 @@ DataTableAsset::register($this);
                             ?>
                             <tr>
                                 <td><?= $index +1 ?></td>
-                                <td><?= $row->date_created ?></td>
+                                <td><?= date('d M Y H:i:s', strtotime($row->date_created)) ?></td>
                                 <td><?= $transaksi ?></td>
                                 <td><?= $row->id_trx ?></td>
                                 <td>IDR. <?= number_format($value, 0, ",", ".") ?></td>
@@ -79,6 +97,19 @@ DataTableAsset::register($this);
 
 <?php
 $script = <<<JS
+
+    const dtPrint = () => {
+        const dtBtn = $('.btn.buttons-print');
+        dtBtn.trigger('click');
+    }
+    const dtExportPdf = () => {
+        const dtBtn = $('.btn.buttons-pdf.buttons-html5');
+        dtBtn.trigger('click');
+    }
+    const dtExportExcel = (e) => {
+        const dtBtn = $('.btn.buttons-excel.buttons-html5');
+        dtBtn.trigger('click');
+    }
 
     $(document).ready(function() {
         $('table').dataTable();

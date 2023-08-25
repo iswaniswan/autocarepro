@@ -16,7 +16,9 @@ use app\models\Kotakab;
 use app\models\Paket;
 use app\models\User;
 use app\models\UserSearch;
+use yii\data\ActiveDataProvider;
 use yii\web\Response;
+use yii\web\UploadedFile;
 
 /* custom controller, theme uplon integrated */
 /**
@@ -539,13 +541,27 @@ class MemberController extends Controller
     public function actionUpdateProfile($id)
     {
         $model = $this->findModel($id);
+        $oldPhoto = $model->photo;
 
         $referrer = Yii::$app->request->referrer;
 
         if ($model->load(Yii::$app->request->post())) {
             $referrer = $_POST['referrer'];
 
+            $upload = UploadedFile::getInstanceByName('Member[photo]');
+            if ($upload !== null) {
+                $model->photo = $upload->baseName . Yii::$app->formatter->asTimestamp(date('Y-d-m h:i:s')) . '.' . $upload->extension;
+            } else {
+                $model->photo = $oldPhoto;
+            }
+
             if ($model->save()) {
+
+                if ($upload !== null) {
+                    $path = Yii::getAlias('@app').'/web/uploads/';
+                    $upload->saveAs($path.$model->photo, false);
+                }
+
                 Yii::$app->session->setFlash('success', 'Update success.');
                 return $this->redirect($referrer);
             }
@@ -769,7 +785,7 @@ class MemberController extends Controller
         return $response;
     }
 
-    public function actionIndexFundStatement()
+    public function actionIndexFundStatement($id_fund_ref=null)
     {
         $isActive = Session::isMemberActive();
 
@@ -781,19 +797,27 @@ class MemberController extends Controller
 
         $connection = Yii::$app->getDb();
 
+        $where = '';
+        if ($id_fund_ref != null and $id_fund_ref != '') {
+            $where = " WHERE id_fund_ref = $id_fund_ref ";
+        }
+
         $sql = <<<SQL
-        SELECT id_member, credit, debet, id_fund_ref, id_trx, date_created 
-        FROM fund_active
-        WHERE id_member = $member->id
-        UNION ALL
-        SELECT id_member, credit, debet, id_fund_ref, id_trx, date_created 
-        FROM fund_passive
-        WHERE id_member = $member->id
-        UNION ALL
-        SELECT id_member, 0 AS credit, total_bayar AS debet, 7 AS id_fund_ref, id_transaksi AS id_trx, created_at AS date_created
-        FROM deposit
-        where id_member = $member->id
-            AND status =1
+        SELECT * FROM (
+            SELECT id_member, credit, debet, id_fund_ref, id_trx, date_created 
+            FROM fund_active
+            WHERE id_member = $member->id
+            UNION ALL
+            SELECT id_member, credit, debet, id_fund_ref, id_trx, date_created 
+            FROM fund_passive
+            WHERE id_member = $member->id
+            UNION ALL
+            SELECT id_member, 0 AS credit, total_bayar AS debet, 7 AS id_fund_ref, id_transaksi AS id_trx, created_at AS date_created
+            FROM deposit
+            where id_member = $member->id
+                AND status = 1
+        ) X
+        $where
         ORDER BY date_created ASC
         SQL;
 
@@ -801,9 +825,17 @@ class MemberController extends Controller
 
         $result = $command->queryAll();
 
+        $provider = new ActiveDataProvider([
+            'query' => $command,
+            'pagination' => [
+                'pageSize' => 10,
+            ]
+        ]);
+
         return $this->render('index-fund-statement', [
             'member' => $member,
-            'result' => $result
+            'result' => $result,
+            'dataProvider' => $provider
         ]);
     }
 

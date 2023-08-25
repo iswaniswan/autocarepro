@@ -5,6 +5,7 @@ namespace app\models;
 use Exception;
 use Yii;
 use yii\helpers\StringHelper;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "member".
@@ -56,6 +57,8 @@ class Member extends \yii\db\ActiveRecord
 
     public $posisi;
 
+    public $imageFile;
+
     /**
      * {@inheritdoc}
      */
@@ -81,7 +84,8 @@ class Member extends \yii\db\ActiveRecord
             [['kodepos', 'rekening', 'rekening_an'], 'string', 'max' => 100],
             [['bank'], 'string', 'max' => 50],
             [['id_user'], 'unique'],
-            [['email', 'username', 'password', 'pin', 'posisi'], 'safe']
+            [['email', 'username', 'password', 'pin', 'posisi'], 'safe'],
+            // [['photo'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg'],
         ];
     }
 
@@ -365,6 +369,30 @@ class Member extends \yii\db\ActiveRecord
         // var_dump($command); die();
 
         return $query->all();
+    }
+
+    public function isDoneCashback()
+    {
+        $fundPassive = FundPassive::find()->where([
+            'id_member' => $this->id,
+            'id_fund_ref' => FundRef::CASHBACK,            
+        ])->one();
+
+        if ($fundPassive != null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function upload()
+    {
+        $this->imageFile = UploadedFile::getInstanceByName($this->photo);
+        if ($this->imageFile->saveAs('uploads/' . $this->imageFile->baseName . '.' . $this->imageFile->extension)) {             
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

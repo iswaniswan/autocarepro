@@ -85,7 +85,7 @@ echo \app\widgets\Breadcrumbs::widget([
                         [
                             'attribute' => 'nilai_omzet',
                             'format' => 'raw',
-                            'header' => 'Nilai Omzet',
+                            'header' => 'Omzet',
                             'value' => function ($model) {
                                 return "IDR. " . number_format($model->getTotalNilaiOmzet(), 0, ",", ".");
                             },
@@ -105,18 +105,17 @@ echo \app\widgets\Breadcrumbs::widget([
                                     return $html;
                                 }
 
-                                return @$model->date_active;
+                                return date('d M Y', strtotime(@$model->date_active));
                             },
                             'headerOptions' => ['style' => 'text-align:left;'],
                             'contentOptions' => ['style' => 'text-align:left'],
                         ],  
                         [
                             'class' => 'yii\grid\ActionColumn',
-                            'template' => '{toggle} {topup}',
-                            'visibleButtons' => ['toggle' => true, 'topup' => true],
+                            'template' => '{toggle} {topup} {cashback}',
+                            'visibleButtons' => ['toggle' => true, 'topup' => true, 'cashback' => true],
                             'buttons' => [
                                 'toggle' => function ($url, $model) {
-
                                     $text = "Aktivasi akun distributor";
                                     $icon = "<i class='ti-check text-white' style='font-size: 10px'></i>";
                                     $iconText = "Activate";
@@ -146,6 +145,24 @@ echo \app\widgets\Breadcrumbs::widget([
                                     
                                     $html = <<<HTML
                                     <a class="$class" href="$url" title="Topup">Tickets</a>
+                                    HTML;
+                                    return $html;                                        
+                                },
+                                'cashback' => function ($url, $model) {
+                                    /** jika bukan distributor */
+                                    if (!$model->isDistributor()) {
+                                        return 'NOT DISTRIBUTOR';
+                                    }
+
+                                    $class = 'btn btn-xs btn-info disabled';
+                                    $url = 'javascript:void(0)';
+                                    if ($model->isDoneCashback() == false) {
+                                        $class = 'btn btn-xs btn-info';
+                                        $url = Url::to(['fund-passive/cashback-distributor', 'id_member' => $model->id]);
+                                    }                                    
+                                    $html = <<<HTML
+                                    <a class="$class" 
+                                        href="$url" title="Cashback" data-confirm="Konfirmasi Cashback 10%" data-method="post">Cashback</a>
                                     HTML;
                                     return $html;                                        
                                 },

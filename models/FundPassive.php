@@ -14,6 +14,7 @@ use Yii;
  * @property int|null $id_fund_ref
  * @property string|null $id_trx
  * @property string|null $date_created
+ * @property Member $member
  */
 class FundPassive extends \yii\db\ActiveRecord
 {
@@ -81,4 +82,26 @@ class FundPassive extends \yii\db\ActiveRecord
         ])->orderBy(['date_created' => SORT_DESC])
         ->one();
     }
+
+    public function getMember()
+    {
+        return $this->hasOne(Member::class, ['id' => 'id_member']);
+    }
+
+    public static function getTotal($id_member, $id_fund_ref)
+    {
+        return static::find()->where([
+            'id_member' => $id_member,
+            'id_fund_ref' => $id_fund_ref
+        ])->sum('credit');
+    }
+
+    public static function getCount($id_member, $id_fund_ref)
+    {
+        return static::find()->where([
+            'id_member' => $id_member,
+            'id_fund_ref' => $id_fund_ref
+        ])->count();
+    }
+
 }

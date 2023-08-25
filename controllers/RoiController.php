@@ -7,6 +7,7 @@ use Yii;
 use app\components\Mode;
 use app\components\Session;
 use app\models\FundPassive;
+use app\models\FundPassiveSearch;
 use app\models\FundRef;
 use app\models\Member;
 use app\models\Paket;
@@ -16,6 +17,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /* custom controller, theme uplon integrated */
 /**
@@ -42,7 +44,16 @@ class RoiController extends Controller
                             'roles' => ['?', '@']
                         ],
                         [
-                            'actions' => ['index', 'index-admin', 'index-history'],
+                            'actions' => [
+                                'index-distributor',
+                            ],
+                            'allow' => true,
+                            'matchCallback' => function ($rule, $action) {
+                                return Session::isDistributor();
+                            }
+                        ],
+                        [
+                            'actions' => ['index', 'index-admin', 'index-history', 'index-history-daily'],
                             'allow' => true,
                             'matchCallback' => function ($rule, $action) {
                                 return Session::isAdmin();
@@ -87,6 +98,18 @@ class RoiController extends Controller
         ]);
     }
 
+    public function actionIndexHistoryDaily()
+    {
+        $searchModel = new FundPassiveSearch();
+        $searchModel->id_fund_ref = FundRef::ROI;
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index-history-daily', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     public function actionIndexAdmin()
     {
         $lastModel = Roi::find()->orderBy(['date_created' => SORT_DESC])->one();
@@ -111,6 +134,23 @@ class RoiController extends Controller
             'lastModel' => $lastModel,
             'referrer' => $referrer,
             'mode' => Mode::CREATE
+        ]);
+    }
+
+    public function actionIndexDistributor()
+    {
+        $lastModel = Roi::find()->orderBy(['date_created' => SORT_DESC])->one();
+
+        $model = new Roi();
+
+        $searchModel = new FundPassiveSearch();
+        $searchModel->id_fund_ref = FundRef::ROI;
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index-distributor', [
+            'model' => $model,
+            'lastModel' => $lastModel,
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -228,14 +268,20 @@ class RoiController extends Controller
 
     public function actionCron()
     {
+        date_default_timezone_set('Asia/Jakarta');
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $response = [
+            'status' => false,
+            'message' => 'error',
+            'data' => []
+        ];
+
         /** ROI */
-        $this->executeRoi();
+        $_message = [];
+        $count = 0;
 
-        echo 'cron executed successfully';
-    }
-
-    protected function executeRoi()
-    {
         /** get all active distributor */
         $allDistributor = Member::find()->where([
             'id_paket' => Paket::DISTRIBUTOR,
@@ -262,9 +308,14 @@ class RoiController extends Controller
                 'id_fund_ref' => FundRef::ROI
             ])->andFilterWhere([
                 'like', 'date_created', $today
-            ])->one();
+            ]);
 
-            if ($fundRoi != null) {
+            // $command = $fundRoi->createCommand()->getRawSql();
+            // var_dump($command); die();
+            // echo $today; 
+            // var_dump($fundRoi->one()); die();
+
+            if ($fundRoi->one() != null) {
                 continue;
             }
 
@@ -274,8 +325,20 @@ class RoiController extends Controller
                 'credit' => $roiValue,
                 'id_trx' => Helper::generateNomorTransaksi()
             ]);
-            $fundPassive->save();
+
+            if ($fundPassive->save()) {
+                $count = $count +1;
+
+                $_message[] = "$member->nama get $roiValue";
+            } else {
+                $_message[] = $fundPassive->errors;
+            }
         }
 
+        $response['status'] = true;
+        $response['message'] = 'Cron Successfully executed';
+        $response['data'] = $_message;
+        
+        return $response;
     }
 }

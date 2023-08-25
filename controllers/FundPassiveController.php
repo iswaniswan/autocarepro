@@ -2,10 +2,14 @@
 
 namespace app\controllers;
 
+use app\components\Helper;
 use Yii;
 use app\components\Mode;
 use app\models\FundPassive;
 use app\models\FundPassiveSearch;
+use app\models\FundRef;
+use app\models\Member;
+use app\models\Paket;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -160,5 +164,37 @@ class FundPassiveController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionCashbackDistributor($id_member=null)
+    {
+        if ($id_member == null) {
+            Yii::$app->session->setFlash('error', 'An error occured when cashback.');
+            return $this->redirect(['member/index-admin-distributor']);
+        }
+
+        $member = Member::findOne(['id' => $id_member]);
+
+        if ($member != null and $member->isDistributor()) {
+            
+            $paket = Paket::findOne(['id' => Paket::DISTRIBUTOR]);
+
+            $cashback = 10 * $paket->price / 100;
+
+            $fund = new FundPassive([
+                'id_member' => $member->id,
+                'credit' => $cashback,
+                'id_trx' => Helper::generateNomorTransaksi(),
+                'id_fund_ref' => FundRef::CASHBACK
+            ]);
+    
+            if ($fund->save()) {
+                Yii::$app->session->setFlash('success', 'Cashback success');
+            } else {
+                Yii::$app->session->setFlash('error', 'An error occured when cashback.');
+            }
+        }
+
+        return $this->redirect(['member/index-admin-distributor']);
     }
 }

@@ -15,6 +15,7 @@ use app\models\Downline;
 use app\models\Groups;
 use app\models\Member;
 use app\models\Role;
+use yii\web\Cookie;
 
 class SiteController extends Controller
 {
@@ -302,6 +303,22 @@ class SiteController extends Controller
             'area' => $area,
             'referral' => $referral
         ]);
+    }
+
+    public function actionToggleDarkMode($flag=true)
+    {
+        $referrer = $this->request->referrer;
+
+        /** cookie check */
+        $cookie = new Cookie([
+            'name' => 'dark-mode',
+            'value' => !$flag,
+            'expire' => time() + 3600, // Cookie expiration time (in seconds)
+        ]);
+
+        Yii::$app->response->cookies->add($cookie);
+
+        return $this->redirect($referrer);
     }
 
 }
