@@ -36,5 +36,6 @@ tests/_support/_generated
 /.vagrant
 
 /config/db.php
+/config/secret.php
 
 /web/assets/*
