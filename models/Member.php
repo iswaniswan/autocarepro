@@ -42,6 +42,7 @@ use yii\web\UploadedFile;
  * @property Kotakab $kotakabs
  * @property Member $downlineRight
  * @property Member $downlineLeft
+ * @property Subdomain $subdomain
  */
 class Member extends \yii\db\ActiveRecord
 {
@@ -385,6 +386,19 @@ class Member extends \yii\db\ActiveRecord
         return false;
     }
 
+    public function isSubdomainActive()
+    {
+        $subdomain = Subdomain::find()->where([
+            'id_member' => $this->id
+        ])->one();
+
+        if ($subdomain == null) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function upload()
     {
         $this->imageFile = UploadedFile::getInstanceByName($this->photo);
@@ -406,6 +420,11 @@ class Member extends \yii\db\ActiveRecord
         }
 
         return false;
+    }
+
+    public function getSubdomain()
+    {
+        return $this->hasOne(Subdomain::class, ['id_member' => 'id']);
     }
 
 }

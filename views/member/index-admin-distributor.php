@@ -115,8 +115,8 @@ echo \app\widgets\Breadcrumbs::widget([
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',
-                            'template' => '{toggle} {topup} {cashback}',
-                            'visibleButtons' => ['toggle' => true, 'topup' => true, 'cashback' => true],
+                            'template' => '{toggle} {topup} {cashback} {subdomain}',
+                            'visibleButtons' => ['toggle' => true, 'topup' => true, 'cashback' => true, 'subdomain' => true],
                             'buttons' => [
                                 'toggle' => function ($url, $model) {
                                     $text = "Aktivasi akun distributor";
@@ -162,12 +162,36 @@ echo \app\widgets\Breadcrumbs::widget([
                                     if ($model->isDoneCashback() == false) {
                                         $class = 'btn btn-xs btn-info';
                                         $url = Url::to(['fund-passive/cashback-distributor', 'id_member' => $model->id]);
-                                    }                                    
+                                    }
                                     $html = <<<HTML
                                     <a class="$class" 
                                         href="$url" title="Cashback" data-confirm="Konfirmasi Cashback 10%" data-method="post">Cashback</a>
                                     HTML;
                                     return $html;                                        
+                                },
+                                'subdomain' => function ($url, $model) {
+                                    /** jika bukan distributor */
+                                    if (!$model->isDistributor()) {
+                                        return 'NOT DISTRIBUTOR';
+                                    }
+
+                                    $title = "Go to Subdomain";
+                                    $dataConfirm = "Go to Subdomain";
+                                    $class = 'btn btn-xs btn-pink';
+                                    $url = 'http://' . $model->subdomain->url;
+                                    $target = "_blank";
+                                    if (!$model->isSubdomainActive()) {
+                                        $title = "Create Subdomain";
+                                        $dataConfirm = "Aktifkan Sub Domain?";
+                                        $class = 'btn btn-xs btn-primary';
+                                        $url = Url::to(['/subdomain/generate', 'id_member' => $model->id]);
+                                        $target = "_self";
+                                    }
+                                    $html = <<<HTML
+                                    <a class="$class" target="$target" href="$url" 
+                                    title="$title" data-confirm="$dataConfirm" data-method="post">$title</a>
+                                    HTML;
+                                    return $html;
                                 },
                             ],
                         ],   

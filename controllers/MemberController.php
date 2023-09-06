@@ -25,6 +25,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Response;
 use yii\web\UploadedFile;
 
+
 /* custom controller, theme uplon integrated */
 /**
  * MemberController implements the CRUD actions for Member model.
@@ -55,7 +56,7 @@ class MemberController extends Controller
                             'update-profile', 'update-paket', 'update-bank', 'update-security', 'member-area',
                             'generate-username', 'generate-password', 'generate-pin', 'index-fund-statement', 'index-fund-statement-view',
                             'index-admin-distributor', 'create-admin-distributor', 'get-list-ref-kota-kab', 'toggle-distributor',
-                            'get-list-member-group'
+                            'get-list-member-group', 'activate-subdomain'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -719,6 +720,23 @@ class MemberController extends Controller
         return $this->redirect(['member/index-admin-distributor']);
     }
 
+    public function actionActivateSubdomain($id)
+    {
+        $model = $this->findModel($id);
+
+        var_dump($model); die();
+
+        $update = $model->isActive() ? 0 : Member::ACTIVE;
+
+        $model->updateAttributes([
+            'is_active' => $update,
+            'date_active' => date('Y-m-d H:i:s')
+        ]);
+
+        Yii::$app->session->setFlash('success', 'Status updated');
+        return $this->redirect(['member/index-admin-distributor']);
+    }
+
     /**
      * Finds the Member model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -1029,5 +1047,7 @@ class MemberController extends Controller
 
         return $response;
     }
+
+
 
 }
