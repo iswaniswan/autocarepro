@@ -52,23 +52,6 @@ echo \app\widgets\Breadcrumbs::widget([
                             'headerOptions' => ['style' => 'text-align:left;'],
                             'contentOptions' => ['style' => 'text-align:left'],
                             ],
-                        // [
-                        //     'attribute' => 'id_paket',
-                        //     'format' => 'raw',
-                        //     'header' => 'Paket',
-                        //     'value' => function ($model) {
-                        //         if (@$model->paket == null) {
-                        //             $html = <<<html
-                        //                 <span class="badge badge-pill badge-secondary" style="padding: 4px 8px;">INACTIVE</span>
-                        //             html;
-
-                        //             return $html;
-                        //         }
-                        //         return strtoupper(@$model->paket->name);
-                        //     },
-                        //     'headerOptions' => ['style' => 'text-align:left;'],
-                        //     'contentOptions' => ['style' => 'text-align:left'],
-                        // ], 
                         [
                             'attribute' => 'id',
                             'format' => 'raw',
@@ -109,7 +92,27 @@ echo \app\widgets\Breadcrumbs::widget([
                             },
                             'headerOptions' => ['style' => 'text-align:left;'],
                             'contentOptions' => ['style' => 'text-align:left'],
-                        ],  
+                        ],
+                        [
+                            'attribute' => 'id',
+                            'format' => 'raw',
+                            'header' => 'Tree',
+                            'value' => function ($model) {
+                                $url = Url::to(['member/index-member-binary-tree-read-only',
+                                    'id_member_binary' => $model->id,
+                                    'id_member_root' => $model->id
+                                ]);
+                                $html = <<<HTML
+                                    <a href="$url" class="btn btn-warning btn-xs">
+                                        <i class="ti ti-shine" style="font-size: smaller"></i>
+                                    </a>
+                                HTML;
+                                return $html;
+
+                            },
+                            'headerOptions' => ['style' => 'text-align:left;'],
+                            'contentOptions' => ['style' => 'text-align:left'],
+                        ],
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'template' => '{toggle} {topup} {cashback}',

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\Helper;
 use Yii;
 
 /**
@@ -115,6 +116,16 @@ class RewardClaimed extends \yii\db\ActiveRecord
         }
 
         return $isOmzetLeftEligible and $isOmzetRightEligible;
+    }
+
+    public function getIdTrx()
+    {
+        if ($this->id_trx == null) {
+            $this->id_trx = Helper::generateNomorTransaksi();
+            $this->save();
+        }
+
+        return $this->id_trx;
     }
 
 }

@@ -23,7 +23,7 @@ class DepositSearch extends Deposit
     {
         return [
             [['id', 'id_member', 'id_paket', 'id_ref_metode_pembayaran', 'total_bayar', 'status'], 'integer'],
-            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['created_at', 'updated_at', 'deleted_at', 'id_transaksi'], 'safe'],
         ];
     }
 
@@ -51,6 +51,7 @@ class DepositSearch extends Deposit
             'id_paket' => $this->id_paket,
             'id_ref_metode_pembayaran' => $this->id_ref_metode_pembayaran,
             'total_bayar' => $this->total_bayar,
+            'id_transaksi' => $this->id_transaksi,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

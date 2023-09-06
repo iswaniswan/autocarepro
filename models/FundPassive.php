@@ -15,6 +15,7 @@ use Yii;
  * @property string|null $id_trx
  * @property string|null $date_created
  * @property Member $member
+ * @property FundRef $fundRef
  */
 class FundPassive extends \yii\db\ActiveRecord
 {
@@ -102,6 +103,18 @@ class FundPassive extends \yii\db\ActiveRecord
             'id_member' => $id_member,
             'id_fund_ref' => $id_fund_ref
         ])->count();
+    }
+
+    public static function getByIdTrx($id_trx)
+    {
+        return static::findOne([
+            'id_trx' => $id_trx
+        ]);
+    }
+
+    public function getFundRef()
+    {
+        return $this->hasOne(FundRef::class,['id' => 'id_fund_ref']);
     }
 
 }

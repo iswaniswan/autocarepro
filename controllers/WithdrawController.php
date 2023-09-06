@@ -144,6 +144,7 @@ class WithdrawController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $referrer = $_POST['referrer'];
 
+            $model->id_transaksi = Helper::generateNomorTransaksi();
             $model->amount = str_replace(".", "", $model->amount);
             $model->fee = str_replace(".", "", $model->fee);
             $model->nett = str_replace(".", "", $model->nett);
@@ -307,7 +308,7 @@ class WithdrawController extends Controller
             $fund = new FundActive([
                 'id_member' => $model->id_member,
                 'debet' => $model->amount,
-                'id_trx' => Helper::generateNomorTransaksi(),
+                'id_trx' => $model->id_transaksi,
                 'id_fund_ref' => FundRef::WITHDRAW
             ]);
         } else {
@@ -315,7 +316,7 @@ class WithdrawController extends Controller
             $fund = new FundPassive([
                 'id_member' => $model->id_member,
                 'debet' => $model->amount,
-                'id_trx' => Helper::generateNomorTransaksi(),
+                'id_trx' => $model->id_transaksi,
                 'id_fund_ref' => FundRef::WITHDRAW
             ]);
         }

@@ -36,6 +36,13 @@ class Withdraw extends \yii\db\ActiveRecord
         return 'withdraw';
     }
 
+    public static function getByIdTrx($id_trx)
+    {
+        return static::findOne([
+            'id_transaksi' => $id_trx
+        ]);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -44,7 +51,7 @@ class Withdraw extends \yii\db\ActiveRecord
         return [
             [['tipe', 'id_member', 'amount', 'fee', 'nett', 'status'], 'integer'],
             [['amount', 'fee', 'nett'], 'required'],
-            [['created_at', 'updated_at', 'deleted_at'], 'safe'],
+            [['created_at', 'updated_at', 'deleted_at', 'id_trx'], 'safe'],
             [['id_transaksi'], 'string', 'max' => 50],
         ];
     }

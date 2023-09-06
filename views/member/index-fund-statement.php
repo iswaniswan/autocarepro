@@ -2,6 +2,7 @@
 
 use app\assets\DataTableAsset;
 use app\components\Mode;
+use app\models\Deposit;
 use app\models\FundRef;
 use yii\bootstrap5\ActiveForm;
 use yii\helpers\Html;
@@ -67,19 +68,26 @@ DataTableAsset::register($this);
                             $value = $row->credit + $row->debet;
 
                             $transaksi = 'Credit';
+                            $linkTransaksi = Url::to([
+                                    '/member/index-fund-statement-view',
+                                    'id_fund_ref' => $row->id_fund_ref,
+                                    'id_trx' => $row->id_trx
+                                ]);
                             if ($row->debet > $row->credit) {
-                                $transaksi = 'Debet';
+                                $fundRef = FundRef::findOne(['id' => $row->id_fund_ref]);
+                                $transaksi = ucwords(@$fundRef->nama);
                             }
 
-                            if ($row->id_fund_ref == FundRef::DEPOSIT) {
-                                $transaksi = 'Deposit';
-                            }
                             ?>
                             <tr>
                                 <td><?= $index +1 ?></td>
-                                <td><?= date('d M Y H:i:s', strtotime($row->date_created)) ?></td>
+                                <td><?= date('Y-m-d H:i:s', strtotime($row->date_created)) ?></td>
                                 <td><?= $transaksi ?></td>
-                                <td><?= $row->id_trx ?></td>
+                                <td>
+                                    <a href="<?= $linkTransaksi ?>" class="text-info">
+                                        <?= $row->id_trx ?>
+                                    </a>
+                                </td>
                                 <td>IDR. <?= number_format($value, 0, ",", ".") ?></td>
                                 <td>
                                     <?php $fundRef = FundRef::findOne(['id' => $row->id_fund_ref]); ?>

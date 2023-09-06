@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\Helper;
+use app\models\FundActive;
 use Yii;
 use app\components\Mode;
 use app\components\Session;
@@ -42,6 +43,13 @@ class RoiController extends Controller
                             ],
                             'allow' => true,
                             'roles' => ['?', '@']
+                        ],
+                        [
+                            'actions' => [
+                                'index-fund',
+                            ],
+                            'allow' => true,
+                            'roles' => ['@']
                         ],
                         [
                             'actions' => [
@@ -341,4 +349,5 @@ class RoiController extends Controller
         
         return $response;
     }
+
 }

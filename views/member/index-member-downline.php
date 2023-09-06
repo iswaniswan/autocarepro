@@ -90,7 +90,7 @@ echo \app\widgets\Breadcrumbs::widget([
                                     return $html;
                                 }
 
-                                return @$model->date_active;
+                                return date('d M Y', strtotime(@$model->date_active));
                             },
                             'headerOptions' => ['style' => 'text-align:left;'],
                             'contentOptions' => ['style' => 'text-align:left'],

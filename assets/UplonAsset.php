@@ -41,7 +41,6 @@ class UplonAsset extends AssetBundle
             'css/*',
             'fonts/*',
             'js/*',
-            'libs/*'
         ]
     ];
 }

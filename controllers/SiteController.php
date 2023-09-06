@@ -152,7 +152,7 @@ class SiteController extends Controller
     {
         $referral = Yii::$app->request->get('referral');
         $area = 'PUSAT';
-        if ($referral != null) {
+        if ($referral != null and strtoupper($referral) != $area) {
 
             try {
                 $memberSponsor = Member::findOne([
@@ -255,6 +255,10 @@ class SiteController extends Controller
                         'nama' => $model->nama,
                         'id_member_sponsor' => $memberSponsor->id,
                         'id_member_upline' => $memberUpline->id,
+                        'phone' => $model->phone,
+                        'bank' => $model->bank,
+                        'rekening' => $model->rekening,
+                        'rekening_an' => $model->rekening_an,
                     ]);
                     $newMember->save();       
         

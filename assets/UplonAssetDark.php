@@ -20,9 +20,9 @@ class UplonAssetDark extends AssetBundle
     public $sourcePath = '@themes/uplon/assets';
     public $css = [
         'css/bootstrap-dark.min.css',
-        'css/icons.css',
         'css/app-dark.css',
-        'css/custom.css'
+        'css/custom.css',
+        'css/icons.css',
     ];
     public $js = [
         'js/vendor.min.js',
@@ -41,7 +41,7 @@ class UplonAssetDark extends AssetBundle
             'css/*',
             'fonts/*',
             'js/*',
-            'libs/*'
+//            'libs/*'
         ]
     ];
 }

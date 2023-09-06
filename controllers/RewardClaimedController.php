@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\Helper;
+use app\models\Reward;
 use Yii;
 use app\components\Mode;
 use app\components\Session;
@@ -68,6 +69,20 @@ class RewardClaimedController extends Controller
             'model' => $this->findModel($id),
             'referrer' => $referrer,
             'mode' => Mode::READ
+        ]);
+    }
+
+    public function actionViewClaimed($id)
+    {
+        $referrer = $this->request->referrer;
+
+        $model = $this->findModel($id);
+        $reward = Reward::findOne(['id' => $model->id_reward]);
+
+        return $this->render('view-claimed', [
+            'model' => $model,
+            'reward' => $reward,
+            'referrer' => $referrer,
         ]);
     }
 

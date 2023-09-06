@@ -7,14 +7,19 @@
 
 namespace app\commands;
 
+use app\components\Helper;
 use app\models\Deposit;
 use app\models\Downline;
 use app\models\FundActive;
 use app\models\FundPassive;
+use app\models\FundRef;
 use app\models\Groups;
 use app\models\Member;
+use app\models\Paket;
 use app\models\RewardClaimed;
+use app\models\Roi;
 use app\models\User;
+use DateTime;
 use DirectoryIterator;
 use Yii;
 use yii\console\Controller;
@@ -95,6 +100,69 @@ class HelloController extends Controller
             }
         }
 
+    }
+
+    public function actionTestRoi90()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $today = new DateTime(); 
+
+        $_message = [];        
+
+        for ($i = 0; $i < 90; $i++) {
+            /** ROI */
+            $currentDay = $today->format('Y-m-d');
+
+            /** get all active distributor */
+            $allDistributor = Member::find()->where([
+                'id_paket' => Paket::DISTRIBUTOR,
+                'is_active' => Member::ACTIVE
+            ])->all();
+
+            /** get rate ROI */
+            $lastRoi = Roi::find()->orderBy(['date_created' => SORT_DESC])->one();
+            $rate = $lastRoi->roi;
+
+            $paket = Paket::findOne(['id' => Paket::DISTRIBUTOR]);
+
+            $roiValue = $rate * $paket->price /100;
+
+            foreach ($allDistributor as $member) {
+                if ($member->isAdmin()) {
+                    continue;
+                }
+    
+                $fundRoi = FundPassive::find()->where([
+                    'id_member' => $member->id,
+                    'id_fund_ref' => FundRef::ROI
+                ])->andFilterWhere([
+                    'like', 'date_created', $currentDay
+                ]);
+    
+                if ($fundRoi->one() != null) {
+                    continue;
+                }
+    
+                $fundPassive = new FundPassive([
+                    'id_member' => $member->id,
+                    'id_fund_ref' => FundRef::ROI,
+                    'credit' => $roiValue,
+                    'id_trx' => Helper::generateNomorTransaksi(),
+                    'date_created' => $today->format('Y-m-d H:i:s')
+                ]);
+    
+                if ($fundPassive->save()) {    
+                    $_message[] = "$currentDay - $member->nama get $roiValue";
+                } else {
+                    $_message[] = $fundPassive->errors;
+                }
+            }
+            
+            $today->modify('-1 day');
+        }
+
+        var_dump($_message);
     }
 
 }

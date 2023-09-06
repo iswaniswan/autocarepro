@@ -51,11 +51,21 @@ echo \app\widgets\Breadcrumbs::widget([
                 'buttons' => ['copy', 'csv', 'excel', 'pdf', 'print']
                 ],
                 'columns' => [
-                                                        ['class' => 'yii\grid\SerialColumn'],
-                                    [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        [
+                            'attribute' => 'date_created',
+                            'format' => 'raw',
+                            'header' => 'Tanggal',
+                            'value' => function ($model) {
+                                return date('d M Y', strtotime($model->date_created));
+                            },
+                            'headerOptions' => ['style' => 'text-align:left;'],
+                            'contentOptions' => ['style' => 'text-align:left'],
+                        ],
+                        [
                         'attribute' => 'id_reward',
                         'format' => 'raw',
-                        'header' => 'Terms',
+                        'header' => 'Nominal',
                         'value' => function ($model) {
                             return number_format(@$model->reward->type, 0, ",", ".");
                         },
@@ -72,13 +82,7 @@ echo \app\widgets\Breadcrumbs::widget([
                         'headerOptions' => ['style' => 'text-align:left;'],
                         'contentOptions' => ['style' => 'text-align:left'],
                         ],
-                                    [
-                        'attribute' => 'date_created',
-                        'format' => 'raw',
-                        'headerOptions' => ['style' => 'text-align:left;'],
-                        'contentOptions' => ['style' => 'text-align:left'],
-                        ],
-                                    [
+                        [
                         'attribute' => 'status',
                         'format' => 'raw',
                         'value' => function ($model) {
@@ -93,7 +97,7 @@ echo \app\widgets\Breadcrumbs::widget([
                     'visibleButtons' => ['view' => true, 'approve' => true],
                     'buttons' => [
                         'view' => function ($url, $model) {
-                            return Html::a('<i class="ti-eye"></i>', ['view', 'id' => @$model->id], ['title' => 'Detail', 'data-pjax' => '0']);
+                            return Html::a('<i class="ti-eye"></i>', ['view-claimed', 'id' => @$model->id], ['title' => 'Detail', 'data-pjax' => '0']);
                         },
                         'approve' => function ($url, $model) {     
                             if ($model->status == RewardClaimed::SUCCESS) {

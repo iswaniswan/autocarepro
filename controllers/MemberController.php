@@ -2,6 +2,11 @@
 
 namespace app\controllers;
 
+use app\models\Deposit;
+use app\models\FundActive;
+use app\models\FundPassive;
+use app\models\FundRef;
+use app\models\Withdraw;
 use Yii;
 use app\models\Member;
 use app\models\MemberSearch;
@@ -37,7 +42,7 @@ class MemberController extends Controller
                 'rules' => [
                     [
                         'actions' => [
-                            'generate-username', 'generate-password', 'generate-pin', 
+                            'generate-username', 'generate-password', 'generate-pin', 'validate-referral-code'
                         ],
                         'allow' => true,
                         'roles' => ['?']
@@ -45,9 +50,10 @@ class MemberController extends Controller
                     [
                         'actions' => [
                             'index', 'index-member', 'view', 'create', 'update', 'delete', 
-                            'index-member-downline', 'index-member-downline-binary', 'index-admin-downline', 'index-member-binary-tree', 'create-member-downline',
+                            'index-member-downline', 'index-member-downline-binary', 'index-admin-downline',
+                            'index-member-binary-tree', 'index-member-binary-tree-read-only', 'create-member-downline',
                             'update-profile', 'update-paket', 'update-bank', 'update-security', 'member-area',
-                            'generate-username', 'generate-password', 'generate-pin', 'index-fund-statement',
+                            'generate-username', 'generate-password', 'generate-pin', 'index-fund-statement', 'index-fund-statement-view',
                             'index-admin-distributor', 'create-admin-distributor', 'get-list-ref-kota-kab', 'toggle-distributor',
                             'get-list-member-group'
                         ],
@@ -238,6 +244,31 @@ class MemberController extends Controller
         return $this->render('index-member-binary-tree', [
             'member' => $member,
             'dataChartBinary' => $dataChartBinary
+        ]);
+    }
+
+    public function actionIndexMemberBinaryTreeReadOnly($id_member_binary=null, $id_member_root=null)
+    {
+        $isActive = Session::isMemberActive();
+
+        if ($isActive == null) {
+            return $this->redirect(['dashboard/index-member']);
+        }
+
+        $id_member = Session::getIdMember();
+
+        if ($id_member_binary != null) {
+            $id_member = $id_member_binary;
+        }
+
+        $member = Member::findOne($id_member);
+
+        $dataChartBinary = Downline::getDataChartBinaryAll($member);
+
+        return $this->render('index-member-binary-tree-read-only', [
+            'member' => $member,
+            'dataChartBinary' => $dataChartBinary,
+            'idMemberRoot' => $id_member_root
         ]);
     }
 
@@ -805,20 +836,25 @@ class MemberController extends Controller
         $sql = <<<SQL
         SELECT * FROM (
             SELECT id_member, credit, debet, id_fund_ref, id_trx, date_created 
-            FROM fund_active
-            WHERE id_member = $member->id
+                FROM fund_active
+                WHERE id_member = $member->id
             UNION ALL
             SELECT id_member, credit, debet, id_fund_ref, id_trx, date_created 
-            FROM fund_passive
-            WHERE id_member = $member->id
+                FROM fund_passive
+                WHERE id_member = $member->id
             UNION ALL
             SELECT id_member, 0 AS credit, total_bayar AS debet, 7 AS id_fund_ref, id_transaksi AS id_trx, created_at AS date_created
-            FROM deposit
-            where id_member = $member->id
-                AND status = 1
+                FROM deposit
+                WHERE id_member = $member->id
+                    AND status = 1
+            /*  UNION ALL
+            SELECT id_member, 0 AS credit, amount AS debet, 3 AS id_fund_ref, id_transaksi AS id_trx, created_at AS date_created
+                FROM withdraw
+                WHERE id_member = $member->id
+                    AND status = 1 */
         ) X
         $where
-        ORDER BY date_created ASC
+        ORDER BY date_created DESC
         SQL;
 
         $command = $connection->createCommand($sql);
@@ -920,6 +956,75 @@ class MemberController extends Controller
                 'message' => 'Form data received successfully.',
                 'data' => $out
             ];
+        }
+
+        return $response;
+    }
+
+    public function actionIndexFundStatementView($id_fund_ref, $id_trx)
+    {
+        if ($id_fund_ref == FundRef::LEVEL) {
+            $model = FundActive::getByIdTrx($id_trx);
+
+            return $this->render('_fund', [
+                'id_fund_ref' => $id_fund_ref,
+                'model' => $model,
+            ]);
+        }
+
+        if ($id_fund_ref == FundRef::ROI or $id_fund_ref == FundRef::CASHBACK) {
+            $model = FundPassive::getByIdTrx($id_trx);
+
+            return $this->render('_fund', [
+                'id_fund_ref' => $id_fund_ref,
+                'model' => $model,
+            ]);
+        }
+
+        if ($id_fund_ref == FundRef::WITHDRAW) {
+            $model = Withdraw::getByIdTrx($id_trx);
+
+            return $this->render('_fund_withdraw', [
+                'id_fund_ref' => $id_fund_ref,
+                'model' => $model,
+            ]);
+        }
+
+        if ($id_fund_ref == FundRef::DEPOSIT) {
+            $model = Deposit::getByIdTrx($id_trx);
+
+            return $this->redirect(['/deposit/history-deposit', 'id' => $model->id]);
+        }
+
+        Yii::$app->session->setFlash('danger', 'Invalid Transaction');
+        return $this->redirect(['/member/index-fund-statement']);
+    }
+
+    public function actionValidateReferralCode()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $response = [
+            'status' => false,
+            'message' => 'error',
+            'data' => []
+        ];
+
+        if (Yii::$app->request->isAjax && Yii::$app->request->post()) {
+
+            $referral_code = Yii::$app->request->post('referral_code');
+
+            $query = Member::findOne(['referral_code' => $referral_code]);
+            if ($query != null) {
+                return [
+                    'status' => 'success',
+                    'message' => 'Form data received successfully.',
+                    'data' => []
+                ];
+            }
+
+            $response['message'] = 'Referral tidak ditemukan';
+
         }
 
         return $response;

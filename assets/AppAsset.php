@@ -37,4 +37,11 @@ class AppAsset extends AssetBundle
         'yii\web\YiiAsset',
 //        'yii\bootstrap5\BootstrapAsset'
     ];
+    public $publishOptions = [
+        'only' => [
+            'css/*',
+            'fonts/*',
+            'js/*',
+        ]
+    ];
 }

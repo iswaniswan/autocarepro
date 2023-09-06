@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Member;
 use Yii;
 use app\components\Mode;
 use app\models\Reward;
@@ -10,6 +11,7 @@ use app\models\RewardSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /* custom controller, theme uplon integrated */
 /**
@@ -46,6 +48,17 @@ class RewardController extends Controller
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionIndexAdmin()
+    {
+        $searchModel = new RewardSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index-admin', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -173,4 +186,46 @@ class RewardController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionEditable()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $response = [
+            'status' => false,
+            'message' => 'error',
+            'data' => []
+        ];
+
+        if (Yii::$app->request->isAjax && Yii::$app->request->post()) {
+
+            $post = Yii::$app->request->post();
+            $id = $post['pk'];
+            $name = $post['name'];
+            $value = $post['value'];
+
+            if ($id != '' and intval($value) > 0) {
+                $model = $this->findModel($id);
+                $model->$name = $value;
+
+                if ($model->save()) {
+                    return [
+                        'status' => 'success',
+                        'message' => 'Form data received successfully.',
+                        'data' => [
+                            'value' => $value,
+                            'displayValue' => "IDR. " . number_format($value, 0, ",", ".")
+                        ]
+                    ];
+                }
+
+                $response['message'] = 'Invalid value';
+            }
+
+
+        }
+
+        return $response;
+    }
+
 }

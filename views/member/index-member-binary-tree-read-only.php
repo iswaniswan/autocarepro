@@ -36,7 +36,16 @@ echo '<pre>'; var_dump($dataChartBinary); echo '</pre>';
             </div>
             <div class="card-body" style="height: 600px; background-color: #fff" id="chart-binary">
                 <div style="float:right; position: absolute; right: 15px">
-                    <a id="ic_refresh" style="display: inline-block" class="btn btn-sm btn-outline-primary" href="<?= Url::to(['/member/index-member-binary-tree']) ?>">
+                    <a id="ic_index" style="display: inline-block" class="btn btn-sm btn-outline-primary" href="<?= Url::to([
+                        '/member/index-admin-distributor',
+                    ]) ?>">
+                        <i class="ti-list mr-2" style="font-size: 16px; vertical-align: inherit"></i> Index
+                    </a>
+                    <a id="ic_refresh" style="display: inline-block" class="btn btn-sm btn-outline-primary" href="<?= Url::to([
+                            '/member/index-member-binary-tree-read-only',
+                            'id_member_binary' => @$idMemberRoot,
+                            'id_member_root' => @$idMemberRoot
+                    ]) ?>">
                         <i class="ti-reload mr-2" style="font-size: 16px; vertical-align: inherit"></i> Refresh
                     </a>
                     <a id="ic_fullscreen_binary" style="display: inline-block" class="btn btn-sm btn-outline-primary" href="#" onclick="setToggleFullscreenBinary()">
@@ -59,7 +68,7 @@ echo '<pre>'; var_dump($dataChartBinary); echo '</pre>';
 <?php
 
 $urlCreate = Url::to(['member/create-member-downline']);
-$urlData = Url::to(['member/index-member-binary-tree']);
+$urlData = Url::to(['member/index-member-binary-tree-read-only']);
 
 $script = <<< JS
     var toggleFullscreen = false;
@@ -115,10 +124,9 @@ $script = <<< JS
             return false;
         }
         if (id === undefined || id === '') {
-            location.href = "{$urlCreate}" + "?id_member_upline="+idUpline+"&id_group="+idGroup+"&posisi="+posisi;
             return false;
         } 
-        location.href = "{$urlData}" + "?id_member_binary=" + id;        
+        location.href = "{$urlData}" + "?id_member_binary=" + id + "&id_member_root=" + "{$idMemberRoot}";        
     }
     
     $(function () {
@@ -133,6 +141,10 @@ $this->registerJs($script, \yii\web\View::POS_END);
 $style = <<<CSS
     #chart-binary-svg {
         margin-top: 80px;
+    }
+
+    .bt-node_content .btn {
+        display: none !important;        
     }
 CSS;
 

@@ -27,6 +27,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public $accept_terms;
     // public $registered_referral_code;
     public $nama;
+    public $phone;
+    public $bank;
+    public $rekening;
+    public $rekening_an;
 
     /**
      * {@inheritdoc}
@@ -47,7 +51,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['date_create'], 'safe'],
             [['username', 'email', 'password', 'pin', 'auth_key', 'access_token', 'registered_referral_code'], 'string', 'max' => 255],
             [['username'], 'unique'],
-            [['remember_me', 'accept_terms', 'username', 'nama'], 'safe']
+            [['remember_me', 'accept_terms', 'username', 'nama', 'phone', 'bank', 'rekening', 'rekening_an'], 'safe']
         ];
     }
 

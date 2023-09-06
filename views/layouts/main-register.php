@@ -9,9 +9,33 @@ use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 use yii\bootstrap5\Nav;
 use yii\bootstrap5\NavBar;
+use yii\web\Cookie;
 
 AppAsset::register($this);
-\app\assets\UplonAsset::register($this);
+//\app\assets\UplonAsset::register($this);
+
+/** cookie check */
+$request = Yii::$app->request;
+$darkMode = $request->cookies->getValue('dark-mode');
+
+if ($darkMode != null and $darkMode == true) {
+    \app\assets\UplonAssetDark::register($this);
+
+    $cookie = new Cookie([
+        'name' => 'dark-mode',
+        'value' => true,
+        'expire' => time() + 3600, // Cookie expiration time (in seconds)
+    ]);
+} else {
+    \app\assets\UplonAsset::register($this);
+
+    $cookie = new Cookie([
+        'name' => 'dark-mode',
+        'value' => false,
+        'expire' => time() + 3600, // Cookie expiration time (in seconds)
+    ]);
+}
+Yii::$app->response->cookies->add($cookie);
 
 $this->registerCsrfMetaTags();
 $this->registerMetaTag(['charset' => Yii::$app->charset], 'charset');

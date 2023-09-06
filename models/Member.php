@@ -395,4 +395,17 @@ class Member extends \yii\db\ActiveRecord
         }
     }
 
+    public function needToReinvest()
+    {
+        if ($this->isDistributor() == true) {
+            $countRoi = FundPassive::getCount($this->id, FundRef::ROI);
+
+            if ($countRoi >= 90) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

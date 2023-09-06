@@ -14,6 +14,8 @@ use Yii;
  * @property int|null $id_fund_ref
  * @property string|null $id_trx
  * @property string|null $date_created
+ * @property Member|null $member
+ * @property FundRef|null $fundRef
  */
 class FundActive extends \yii\db\ActiveRecord
 {
@@ -71,6 +73,23 @@ class FundActive extends \yii\db\ActiveRecord
         return static::find()->where([
             'id_member' => $id_member
         ])->sum('debet');
+    }
+
+    public static function getByIdTrx($id_trx)
+    {
+        return static::findOne([
+            'id_trx' => $id_trx
+        ]);
+    }
+
+    public function getMember()
+    {
+        return $this->hasOne(Member::class, ['id' => 'id_member']);
+    }
+
+    public function getFundRef()
+    {
+        return $this->hasOne(FundRef::class,['id' => 'id_fund_ref']);
     }
 
 }

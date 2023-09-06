@@ -11,6 +11,7 @@ use Yii;
  * @property int|null $id_member
  * @property int|null $id_paket
  * @property int|null $id_ref_metode_pembayaran
+ * @property string|null $id_transaksi
  * @property int|null $total_bayar
  * @property int|null $status
  * @property string|null $created_at
@@ -44,7 +45,7 @@ class Deposit extends \yii\db\ActiveRecord
     {
         return [
             [['id_member', 'id_paket', 'id_ref_metode_pembayaran', 'status'], 'integer'],
-            [['total_bayar'], 'safe'],
+            [['total_bayar', 'id_transaksi'], 'safe'],
             [['total_bayar', 'id_paket'], 'required'],
             [['created_at', 'updated_at', 'deleted_at'], 'safe'],
         ];
@@ -61,6 +62,7 @@ class Deposit extends \yii\db\ActiveRecord
             'id_paket' => 'Paket',
             'id_ref_metode_pembayaran' => 'Metode Pembayaran',
             'total_bayar' => 'Total Bayar',
+            'id_transaksi' => 'ID Transaksi',
             'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
@@ -138,6 +140,13 @@ class Deposit extends \yii\db\ActiveRecord
         ]);
 
         return $query->sum('total_bayar');
+    }
+
+    public static function getByIdTrx($id_trx)
+    {
+        return static::findOne([
+            'id_transaksi' => $id_trx
+        ]);
     }
 
 }

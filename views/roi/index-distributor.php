@@ -6,9 +6,13 @@ use app\components\Mode;
 use app\components\Session;
 use app\models\FundPassive;
 use app\models\FundRef;
+use app\models\Member;
 use app\models\Paket;
 use app\models\Roi;
+use app\widgets\Alert;
+use app\widgets\UplonAlert;
 use yii\bootstrap5\ActiveForm;
+use yii\helpers\Url;
 use yii\web\View;
 
 /* @var $this yii\web\View */
@@ -24,7 +28,9 @@ echo \app\widgets\Breadcrumbs::widget([
     'options' => [
         'title' => $this->title
     ],
-]) ?>
+]);
+
+?>
 
 
 <div class="row">
@@ -52,7 +58,7 @@ echo \app\widgets\Breadcrumbs::widget([
                 $persenRoi = $countRoi / Roi::MAX * 100;
             } 
             ?>
-            <h3 class="text-white my-3">IDR. <?= $myRoi ?>
+            <h3 class="text my-3">IDR. <?= $myRoi ?>
                 <span class="text-danger float-right"><b><?= number_format($persenRoi, 2, ",", ".") ?>%</b></span>
             </h3>
             <div class="progress progress-xl" style="height: 20px;">

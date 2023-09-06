@@ -15,8 +15,12 @@ $itemsDistributor = [
     ]],   
     ['label' => 'Deposit Member', 'icon' =>'ti-bag', 'url' =>['/deposit/index-distributor']],
     ['label' => 'Withdraw Member', 'icon' =>'ti-wallet', 'url' =>['/withdraw/index-distributor']],
-    ['label' => 'Reward Member', 'icon' =>'ti-crown', 'url' =>['/reward-claimed']],
-    ['label' => 'Reward', 'icon' => 'ti-cup', 'url' => ['/reward/index-member']],
+    ['label' => 'Reward', 'icon' => 'ti-cup', 'items' => [
+        ['label' => 'Daftar Reward', 'url' =>['/reward/index-member']],
+        ['label' => 'Reward Member', 'url' =>['/reward-claimed']],
+    ]],
+//    ['label' => 'Reward Member', 'icon' =>'ti-crown', 'url' =>['/reward-claimed']],
+//    ['label' => 'Reward', 'icon' => 'ti-cup', 'url' => ['/reward/index-member']],
     ['label' => 'Fund Statement', 'icon' => 'ti-book', 'url' => ['/member/index-fund-statement']],
     ['label' => 'Logout', 'icon'=>'ti-shift-right', 'url' => ['/site/logout'], 'template'=>'<a class="nav-link {active}" data-method="post" href="{url}" {target}>{icon} {label}</a>'],
 ];
@@ -40,7 +44,14 @@ $itemsAdmin = [
     ]],  
     ['label' => 'Deposit Member', 'icon' =>'ti-bag', 'url' =>['/deposit/index-admin']],
     ['label' => 'Withdraw Member', 'icon' =>'ti-wallet', 'url' =>['/withdraw/index-admin']],
-    ['label' => 'Reward Member', 'icon' =>'ti-crown', 'url' =>['/reward-claimed']],
+    ['label' => 'Reward', 'icon' => 'ti-cup', 'items' => [
+        ['label' => 'Daftar Reward', 'url' =>['/reward/index-member']],
+        ['label' => 'Reward Member', 'url' =>['/reward-claimed']],
+    ]],
+    ['label' => 'Master', 'icon' => 'ti-settings', 'items' => [
+        ['label' => 'Reward', 'url' =>['/reward/index-admin']],
+    ]],
+//    ['label' => 'Reward Member', 'icon' =>'ti-crown', 'url' =>['/reward-claimed']],
     // ['label' => 'User', 'icon' =>'ti-user', 'items'=>[
     //     ['label' => 'login', 'url' =>['/user']],
     //     ['label' => 'Member', 'url' =>['/member']],

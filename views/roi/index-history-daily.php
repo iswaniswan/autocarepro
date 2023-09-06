@@ -52,9 +52,12 @@ echo \app\widgets\Breadcrumbs::widget([
                 ],
                 'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
-                                    [
+                        [
                         'attribute' => 'date_created',
                         'format' => 'raw',
+                        'value' => function ($model) {
+                            return date('d M Y', strtotime($model->date_created));
+                        },
                         'headerOptions' => ['style' => 'text-align:left;'],
                         'contentOptions' => ['style' => 'text-align:left'],
                         ],

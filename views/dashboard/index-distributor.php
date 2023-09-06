@@ -10,6 +10,7 @@ use app\models\Member;
 use app\models\Paket;
 use app\models\Roi;
 use app\models\Withdraw;
+use app\widgets\UplonAlert;
 use yii\helpers\Url;
 
 $username = Session::getUsername();
@@ -39,6 +40,17 @@ $group = $member->getGroupAsAdmin();
 
 /** roi */
 $currentRoi = Roi::getCurrentRoi();
+
+if ($member->isDistributor() and $member->needToReinvest()) {
+
+    echo UplonAlert::widget([
+        'type' => UplonAlert::DANGER,
+        'message' => 'Progress Roi mencapai 100%, Silakan Reinvest!',
+        'actionUrl' => Url::to(['/dashboard'])
+    ]);
+
+}
+
 ?>
 
 <?php /*
