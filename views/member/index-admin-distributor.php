@@ -178,7 +178,7 @@ echo \app\widgets\Breadcrumbs::widget([
                                     $title = "Go to Subdomain";
                                     $dataConfirm = "Go to Subdomain";
                                     $class = 'btn btn-xs btn-pink';
-                                    $url = 'http://' . $model->subdomain->url;
+                                    $url = 'http://' . @$model->subdomain->url;
                                     $target = "_blank";
                                     if (!$model->isSubdomainActive()) {
                                         $title = "Create Subdomain";
