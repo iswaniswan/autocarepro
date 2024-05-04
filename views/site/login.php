@@ -15,8 +15,23 @@ $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="row mb-4 justify-content-center">
-    <div class="col-8" style="">
+<style>
+    .box-center {
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        height: 80vh;
+        width: 80vw;
+        margin:auto;
+    }
+    a.dropdown-item, a.dropdown-item *:hover {
+        cursor: pointer;
+        background-color: transparent !important;
+    }
+</style>
+
+<div class="row mb-4 justify-content-center box-center">
+    <div class="col-lg-6">
         <?php $form = ActiveForm::begin([
             'id' => 'login-form',
             'layout' => 'horizontal',
@@ -34,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="card mb-0" style="box-shadow: 0px 0px 35px 35px rgba(73,80,87,.15) !important">
             <div class="card-body" style="padding: unset">
                 <div class="row">
-                    <div class="col-md-5 bg-primary" style="padding: 2rem">
+                    <div class="col-md-6 bg-primary" style="padding: 2rem">
                         <a href="#" style="display: block;" class="my-3">
                             <img src="<?= Yii::getAlias('@web').'/images/LOGO.png' ?>" style="width:100%">
                         </a>
@@ -43,11 +58,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="col-12 text-center" style="">
                             <p class="">Don't have an account?
-                                <a href="<?= \yii\helpers\Url::to(['/site/register']) ?>" class="text-purple ml-1" style="display: block"><b>Register</b></a>
+                                <a href="<?= \yii\helpers\Url::to(['/site/register']) ?>" class="text-purple ml-1" style="display: block"><h5>Register</h5></a>
                             </p>
                         </div>
                     </div>
-                    <div class="col-md-7 bg-light" style="padding: 2rem;">
+                    <div class="col-md-6 bg-light" style="padding: 2rem;">
                         <h3>Account Login</h3>
                         <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
 
@@ -82,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
         }
         ?>
         <div class="row mt-2">
-            <a href="<?= Url::to(['site/toggle-dark-mode', 'flag' => $flag]) ?>" class="dropdown-item notify-item text-center">
+            <a href="<?= Url::to(['site/toggle-dark-mode', 'flag' => $flag]) ?>" class="dropdown-item notify-item text-center" style="width:fit-content; margin: auto; padding: .5rem 0;">
                 <div class="custom-control custom-switch">
                     <input type="checkbox" class="custom-control-input theme-choice"
                            id="dark-mode-switch" <?= $checked ?>>

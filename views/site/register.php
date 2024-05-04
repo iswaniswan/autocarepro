@@ -16,6 +16,30 @@ $this->title = 'Register';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<style>
+    .box-center {
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        height: 80vh;
+        width: 80vw;
+        margin:auto;
+    }
+    a.dropdown-item, a.dropdown-item *:hover {
+        cursor: pointer;
+        background-color: transparent !important;
+    }
+    a[data-index]:not(.disabled) {
+        box-shadow: 0px 0px 4px #f1b53d;
+    }
+
+    .box-bottom {
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+    }
+</style>
+
 <div class="row justify-content-center">
     <?php $form = ActiveForm::begin([
         'id' => 'register-form',
@@ -43,30 +67,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
             <div class="col-md-12 text-center">
-                <h4 class="header-title mb-5">Registrasi Member</h4>
+                <h3 class="mb-5">Account Registration</h3>
                 <div class="row">
-                    <div class="col">
+                    <div class="col box-bottom">
                         <a id="t-0" data-index="0" class="btn btn-primary btn-action btn-rounded mx-auto mb-2" href="#h-0"
                            style="border-radius: 100% !important; height: 48px; width: 48px; display: flex; position: relative">
                             <span class="icon-link" style="font-size: 1rem; position: absolute; top: 29%; left: 33%"></span>
                         </a>
                         <p class="text-center">Referral</p>
                     </div>
-                    <div class="col">
+                    <div class="col box-bottom">
                         <a id="t-1" data-index="1" class="btn btn-primary btn-action btn-rounded disabled mx-auto mb-2" href="#h-1"
                            style="border-radius: 100% !important; height: 48px; width: 48px; display: flex; position: relative">
                             <span class="icon-key" style="font-size: 1rem; position: absolute; top: 29%; left: 33%"></span>
                         </a>
                         <p class="text-center">Account</p>
                     </div>
-                    <div class="col">
+                    <div class="col box-bottom">
                         <a id="t-2" data-index="2" class="btn btn-primary btn-action btn-rounded disabled mx-auto mb-2" href="#h-2"
                            style="border-radius: 100% !important; height: 48px; width: 48px; display: flex; position: relative">
                             <span class="icon-user" style="font-size: 1rem; position: absolute; top: 29%; left: 33%"></span>
                         </a>
                         <p class="text-center">Profile</p>
                     </div>
-                    <div class="col">
+                    <div class="col box-bottom">
                         <a id="t-3" data-index="3" class="btn btn-primary btn-action btn-rounded disabled mx-auto mb-2" href="#h-3"
                            style="border-radius: 100% !important; height: 48px; width: 48px; display: flex; position: relative">
                             <span class="icon-wallet" style="font-size: 1rem; position: absolute; top: 29%; left: 33%"></span>
